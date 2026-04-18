@@ -5,8 +5,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.eventmaster.ui.navigation.Routes
+import com.example.eventmaster.ui.screens.Category
 import com.example.eventmaster.ui.screens.HomeScreen
 import com.example.eventmaster.ui.screens.CreateCategory
+import com.example.eventmaster.ui.screens.CreateEvent
+import com.example.eventmaster.ui.screens.Event
 
 /*
 * Navigation
@@ -26,6 +29,15 @@ fun Navigation(){
         composable(Routes.CreateCategory+"/{name}"){
             val name = it.arguments?.getString("name")
             CreateCategory(name ?: "No name")
+        }
+        composable(Routes.Category){
+            Category()
+        }
+        composable(Routes.CreateEvent){
+            CreateEvent()
+        }
+        composable(Routes.Event){
+            Event()
         }
     })
 }

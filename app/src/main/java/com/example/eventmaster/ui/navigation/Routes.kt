@@ -8,4 +8,7 @@ package com.example.eventmaster.ui.navigation
 object Routes {
     var HomeScreen = "Home_Screen"
     var CreateCategory = "Create_Category"
+    var Category = "Category"
+    var CreateEvent = "Create_Event"
+    var Event = "Event"
 }
