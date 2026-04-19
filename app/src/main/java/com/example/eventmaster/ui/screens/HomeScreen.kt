@@ -3,6 +3,8 @@ package com.example.eventmaster.ui.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -24,7 +26,7 @@ import com.example.eventmaster.viewmodel.HomeViewModel
 @Composable
 fun HomeScreen(navController: NavController, viewModel: HomeViewModel){
 
-    val categoryData = viewModel.categoryData.observeAsState()
+    val categoryData = viewModel.categories.observeAsState()
     val isLoading = viewModel.isLoading.observeAsState()
 
     Column(
@@ -41,12 +43,18 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel){
         if(isLoading.value == true){
             CircularProgressIndicator()
         } else {
-            categoryData.value?.nombre?.let {
-                Text(text = "Nombre Es $it")
-            }
-            categoryData.value?.descripcion?.let {
-                Text(text = it)
-            }
+            LazyColumn(
+                content = {
+                    items(categoryData.value ?: emptyList()){
+                        Text(text = "ID: ${it.id}")
+                        Text(text = "Nombre: ${it.nombre}")
+                        Text(text = "Descripcion: ${it.descripcion}")
+                        Button(onClick = {navController.navigate(Routes.Category+"/${it.id}")}) {
+                            Text(text = "Ver Categoria ${it.nombre}")
+                        }
+                    }
+                }
+            )
         }
     }
 }

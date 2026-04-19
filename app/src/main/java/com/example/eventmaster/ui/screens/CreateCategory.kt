@@ -63,7 +63,7 @@ fun CreateCategory(navController: NavController,homeViewModel: HomeViewModel){
             CircularProgressIndicator()
         } else {
             Button(onClick = {
-                homeViewModel.createCategory(nombre, descripcion)
+                homeViewModel.addCategory(nombre, descripcion)
                 navController.navigate(Routes.HomeScreen)
             }) {
                 Text(text = "Crear Nueva categoria")

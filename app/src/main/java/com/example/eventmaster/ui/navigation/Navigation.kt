@@ -33,8 +33,9 @@ fun Navigation(){
         composable(Routes.CreateCategory){
             CreateCategory(navController,homeViewModel)
         }
-        composable(Routes.Category){
-            Category()
+        composable(Routes.Category+"/{categoryId}"){
+            val id = it.arguments?.getInt("categoryId")
+            Category(id,homeViewModel)
         }
         composable(Routes.CreateEvent){
             CreateEvent()
