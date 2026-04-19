@@ -1,6 +1,7 @@
 package com.example.eventmaster
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -10,6 +11,7 @@ import com.example.eventmaster.ui.screens.HomeScreen
 import com.example.eventmaster.ui.screens.CreateCategory
 import com.example.eventmaster.ui.screens.CreateEvent
 import com.example.eventmaster.ui.screens.Event
+import com.example.eventmaster.viewmodel.HomeViewModel
 
 /*
 * Navigation
@@ -22,13 +24,14 @@ import com.example.eventmaster.ui.screens.Event
 @Composable
 fun Navigation(){
     val navController = rememberNavController()
+    val homeViewModel: HomeViewModel = viewModel()
+
     NavHost(navController = navController, startDestination = Routes.HomeScreen, builder = {
         composable(Routes.HomeScreen){
-            HomeScreen(navController)
+            HomeScreen(navController,homeViewModel)
         }
-        composable(Routes.CreateCategory+"/{name}"){
-            val name = it.arguments?.getString("name")
-            CreateCategory(name ?: "No name")
+        composable(Routes.CreateCategory){
+            CreateCategory(navController,homeViewModel)
         }
         composable(Routes.Category){
             Category()
