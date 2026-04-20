@@ -1,11 +1,8 @@
 package com.example.eventmaster.model
 
-
-data class CategoryData(
+data class EventData(
     var id : Int = ++lastId,
     var nombre : String,
-    var descripcion : String,
-    var events: List<EventData> = emptyList()
 ){
     companion object {
         private var lastId = 0 // Tracks the last used ID

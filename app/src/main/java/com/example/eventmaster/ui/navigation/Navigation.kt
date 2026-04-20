@@ -11,7 +11,8 @@ import com.example.eventmaster.ui.screens.HomeScreen
 import com.example.eventmaster.ui.screens.CreateCategory
 import com.example.eventmaster.ui.screens.CreateEvent
 import com.example.eventmaster.ui.screens.Event
-import com.example.eventmaster.viewmodel.HomeViewModel
+import com.example.eventmaster.viewmodel.CategoryViewModel
+import com.example.eventmaster.viewmodel.EventViewModel
 
 /*
 * Navigation
@@ -24,21 +25,24 @@ import com.example.eventmaster.viewmodel.HomeViewModel
 @Composable
 fun Navigation(){
     val navController = rememberNavController()
-    val homeViewModel: HomeViewModel = viewModel()
+    val categoryViewModel: CategoryViewModel = viewModel()
+    val eventViewModel: EventViewModel = viewModel()
 
     NavHost(navController = navController, startDestination = Routes.HomeScreen, builder = {
         composable(Routes.HomeScreen){
-            HomeScreen(navController,homeViewModel)
+            HomeScreen(navController,categoryViewModel)
         }
         composable(Routes.CreateCategory){
-            CreateCategory(navController,homeViewModel)
+            CreateCategory(navController,categoryViewModel)
         }
-        composable(Routes.Category+"/{categoryId}"){
-            val id = it.arguments?.getInt("categoryId")
-            Category(id,homeViewModel)
+        composable(Routes.Category+"/{categoryId}"){ backStackEntry ->
+            val id = backStackEntry.arguments?.getString("categoryId")?.toIntOrNull()
+            Category(navController,id,categoryViewModel,eventViewModel)
         }
-        composable(Routes.CreateEvent){
-            CreateEvent()
+        composable(Routes.CreateEvent + "/{categoryId}"){ backStackEntry ->
+            val categoryId = backStackEntry.arguments?.getString("categoryId")?.toIntOrNull()
+            if (categoryId != null)
+                CreateEvent(navController,categoryViewModel,categoryId)
         }
         composable(Routes.Event){
             Event()

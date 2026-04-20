@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.eventmaster.ui.navigation.Routes
-import com.example.eventmaster.viewmodel.HomeViewModel
+import com.example.eventmaster.viewmodel.CategoryViewModel
 
 /*
 * Create Category
@@ -34,7 +34,7 @@ import com.example.eventmaster.viewmodel.HomeViewModel
 
 
 @Composable
-fun CreateCategory(navController: NavController,homeViewModel: HomeViewModel){
+fun CreateCategory(navController: NavController,categoryViewModel: CategoryViewModel){
 
     var nombre by remember {
         mutableStateOf("")
@@ -42,7 +42,7 @@ fun CreateCategory(navController: NavController,homeViewModel: HomeViewModel){
     var descripcion by remember {
         mutableStateOf("")
     }
-    val isLoading = homeViewModel.isLoading.observeAsState()
+    val isLoading = categoryViewModel.isLoading.observeAsState()
 
     Column(
         Modifier.fillMaxSize(),
@@ -63,7 +63,7 @@ fun CreateCategory(navController: NavController,homeViewModel: HomeViewModel){
             CircularProgressIndicator()
         } else {
             Button(onClick = {
-                homeViewModel.addCategory(nombre, descripcion)
+                categoryViewModel.addCategory(nombre, descripcion)
                 navController.navigate(Routes.HomeScreen)
             }) {
                 Text(text = "Crear Nueva categoria")

@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eventmaster.model.CategoryData
 import com.example.eventmaster.model.CategoryRepository
+import com.example.eventmaster.model.EventData
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
 
-class HomeViewModel : ViewModel(){
+class CategoryViewModel : ViewModel(){
     val categoryRepository : CategoryRepository = CategoryRepository()
 
     private val _categories = MutableLiveData<List<CategoryData>>(emptyList())
@@ -29,5 +29,16 @@ class HomeViewModel : ViewModel(){
             }
         }
 
+    }
+    fun addEventToCategory(categoryId: Int, event: EventData) {
+        val currentCategories = _categories.value ?: emptyList()
+        val updatedCategories = currentCategories.map { category ->
+            if (category.id == categoryId) {
+                category.copy(events = category.events + event)
+            } else {
+                category
+            }
+        }
+        _categories.postValue(updatedCategories)
     }
 }

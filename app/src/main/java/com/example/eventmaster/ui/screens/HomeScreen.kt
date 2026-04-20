@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.eventmaster.ui.navigation.Routes
-import com.example.eventmaster.viewmodel.HomeViewModel
+import com.example.eventmaster.viewmodel.CategoryViewModel
 
 /*
 * Home Screen
@@ -23,8 +23,9 @@ import com.example.eventmaster.viewmodel.HomeViewModel
 * ademas de poder crear nuevas categorias de ser necesario
 * */
 
+
 @Composable
-fun HomeScreen(navController: NavController, viewModel: HomeViewModel){
+fun HomeScreen(navController: NavController, viewModel: CategoryViewModel){
 
     val categoryData = viewModel.categories.observeAsState()
     val isLoading = viewModel.isLoading.observeAsState()
@@ -49,7 +50,7 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel){
                         Text(text = "ID: ${it.id}")
                         Text(text = "Nombre: ${it.nombre}")
                         Text(text = "Descripcion: ${it.descripcion}")
-                        Button(onClick = {navController.navigate(Routes.Category+"/${it.id}")}) {
+                        Button(onClick = {navController.navigate(Routes.Category + "/${it.id}")}) {
                             Text(text = "Ver Categoria ${it.nombre}")
                         }
                     }
