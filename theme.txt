@@ -1,0 +1,21 @@
+Column(
+        Modifier.fillMaxSize()
+            .background(Color(0xFF745944)),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(text = "Event Master Pantalla")
+        Button(onClick = {
+            navController.navigate(Routes.CreateCategory)
+        }) {
+            Text(text = "Crear Categoria", color = MaterialTheme.colorScheme.onPrimary)
+        }
+        if(isLoading.value == true){
+            CircularProgressIndicator()
+        } else {
+            categoryData.value?.nombre?.let {
+                Text(text = "Nombre Es $it", color = MaterialTheme.colorScheme.onPrimary)
+            }
+            categoryData.value?.descripcion?.let {
+                Text(text = it, color = MaterialTheme.colorScheme.onPrimary)
+            }
