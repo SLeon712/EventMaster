@@ -36,16 +36,20 @@ fun Navigation(){
             CreateCategory(navController,categoryViewModel)
         }
         composable(Routes.Category+"/{categoryId}"){ backStackEntry ->
-            val id = backStackEntry.arguments?.getString("categoryId")?.toIntOrNull()
-            Category(navController,id,categoryViewModel,eventViewModel)
+            val categoryId = backStackEntry.arguments?.getString("categoryId")?.toIntOrNull()
+            if (categoryId != null)
+                Category(navController,categoryId,categoryViewModel,eventViewModel)
         }
         composable(Routes.CreateEvent + "/{categoryId}"){ backStackEntry ->
             val categoryId = backStackEntry.arguments?.getString("categoryId")?.toIntOrNull()
             if (categoryId != null)
                 CreateEvent(navController,categoryViewModel,categoryId)
         }
-        composable(Routes.Event){
-            Event()
+        composable(Routes.Event + "/{categoryId}" + "/{eventId}"){ backStackEntry ->
+            val categoryId = backStackEntry.arguments?.getString("categoryId")?.toIntOrNull()
+            val EventId = backStackEntry.arguments?.getString("eventId")?.toIntOrNull()
+            if (categoryId != null && EventId != null)
+                Event(navController,categoryViewModel,categoryId,eventViewModel,EventId)
         }
     })
 }
