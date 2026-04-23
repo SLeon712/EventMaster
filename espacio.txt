@@ -1,1 +1,0 @@
-Spacer(modifier=Modifier.size(22.dp))
