@@ -20,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,14 +27,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.eventmaster.ui.navigation.Routes
 import com.example.eventmaster.viewmodel.CategoryViewModel
-import com.example.eventmaster.viewmodel.EventViewModel
+
+/*
+* Category
+*
+* Archivo kotlin que funciona para pantalla para ver una categoria seleccionada y los eventos que contiene,
+* ademas de dar la posibilidad de crear mas eventos
+* */
 
 @Composable
 fun Category(
     navController: NavController,
     id: Int?,
     categoryViewModel: CategoryViewModel,
-    eventViewModel: EventViewModel
 ){
     val category = categoryViewModel.categories.value?.find { it.id == id }
 

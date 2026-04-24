@@ -9,6 +9,12 @@ import com.example.eventmaster.model.CategoryRepository
 import com.example.eventmaster.model.EventData
 import kotlinx.coroutines.launch
 
+/*
+* Category ViewModel
+*
+* clase viewmodel de categoria como puente para añadir categorias desde las pantallas hacia categoryData,
+* tambien sirve para añadir eventos desde las pantallas a EventData.
+* */
 class CategoryViewModel : ViewModel(){
     val categoryRepository : CategoryRepository = CategoryRepository()
 
