@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -20,6 +22,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -27,7 +31,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.eventmaster.R
 import com.example.eventmaster.ui.navigation.Routes
@@ -48,40 +55,60 @@ fun HomeScreen(navController: NavController, viewModel: CategoryViewModel){
     val isLoading = viewModel.isLoading.observeAsState()
 
     Column(
-        Modifier.fillMaxSize().background(colorResource(R.color.on_primary_container_light)),
+        Modifier.fillMaxSize().background(MaterialTheme.colorScheme.primary),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Event Master Pantalla")
-        Button(onClick = {
-            navController.navigate(Routes.CreateCategory)
-        }, colors= ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFFFB780),
-            contentColor = Color.White)
+        Spacer(modifier = Modifier.height(60.dp))
+
+        Text(
+            text = "Event Master",
+            fontSize = 36.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primaryContainer,
+        )
+
+        Button(
+            onClick = { navController.navigate(Routes.CreateCategory)},
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.inversePrimary)
         ){
             Spacer(modifier = Modifier.height(22.dp))
             Text(text = "Crear Categoria")
         }
         Spacer(modifier = Modifier.height(10.dp))
         if(isLoading.value == true){
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.inversePrimary)
         } else {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
                 content = {
                     items(categoryData.value ?: emptyList()) { category ->
                         Button(
                             onClick = { navController.navigate(Routes.Category + "/${category.id}") },
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(8.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFFFFB780),
-                                contentColor = Color.White
-                            )
+                                .padding(8.dp)
+                                .height(110.dp),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.inversePrimary)
                         ) {
-                            Text(text = category.nombre)
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = category.iconoId),
+                                    modifier = Modifier.size(36.dp),
+                                    contentDescription = "Icono",
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = category.nombre,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
                         }
                     }
                 }

@@ -16,11 +16,11 @@ class EventViewModel : ViewModel(){
     private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading : LiveData<Boolean> = _isLoading
 
-    fun addEvent(nombre: String){
+    fun addEvent(nombre: String,descripcion: String,organizador: String){
         _isLoading.postValue(true)
         viewModelScope.launch {
             try {
-                val newEvent = eventRepository.fetchEventData(nombre)
+                val newEvent = eventRepository.fetchEventData(nombre, descripcion, organizador)
                 val currentEvent = _events.value ?: emptyList()
                 _events.postValue(currentEvent+ newEvent)
             } finally {

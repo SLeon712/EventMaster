@@ -17,11 +17,11 @@ class CategoryViewModel : ViewModel(){
     private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading : LiveData<Boolean> = _isLoading
 
-    fun addCategory(nombre: String, descripcion: String){
+    fun addCategory(nombre: String, descripcion: String, iconoId : Int){
         _isLoading.postValue(true)
         viewModelScope.launch {
             try {
-                val newCategory = categoryRepository.fetchCategoryData(nombre,descripcion)
+                val newCategory = categoryRepository.fetchCategoryData(nombre,descripcion,iconoId)
                 val currentCategory = _categories.value ?: emptyList()
                 _categories.postValue(currentCategory+ newCategory)
             } finally {
