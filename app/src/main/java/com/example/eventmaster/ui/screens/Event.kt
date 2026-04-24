@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -18,21 +16,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.eventmaster.R
 import com.example.eventmaster.viewmodel.CategoryViewModel
-import com.example.eventmaster.viewmodel.EventViewModel
 
+/*
+* Event
+*
+* Archivo kotlin que funciona para ver los detalles de un evento seleccionado
+* */
 @Composable
 fun Event(
-    navController: NavController,
     categoryViewModel: CategoryViewModel,
     categoryId: Int?,
-    eventViewModel: EventViewModel,
     eventId: Int?
 ){
     val category = categoryViewModel.categories.value?.find { it.id == categoryId }
