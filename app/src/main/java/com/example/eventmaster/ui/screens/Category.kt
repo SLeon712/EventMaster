@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,7 +42,8 @@ fun Category(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(R.color.background_light)),
+            .background(colorResource(R.color.background_light))
+            .background(MaterialTheme.colorScheme.primary),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -54,8 +56,15 @@ fun Category(
 
                     Text(
                         text = category.nombre,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primaryContainer
+                    )
+                    Text(
+                        text = category.descripcion,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = MaterialTheme.colorScheme.primaryContainer
                     )
 
                     Spacer(modifier = Modifier.height(10.dp))
@@ -66,10 +75,9 @@ fun Category(
                             navController.navigate(Routes.CreateEvent + "/${category.id}")
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(0.dp),
+                        shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF65A30D),
-                            contentColor = Color.White
+                            containerColor = MaterialTheme.colorScheme.inversePrimary
                         )
                     ) {
                         Text(text = "Crear Evento")
@@ -89,10 +97,10 @@ fun Category(
                                     navController.navigate(Routes.Event + "/${category.id}" + "/${event.id}")
                                 },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(0.dp),
+                                shape = RoundedCornerShape(8.dp),
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xFFD6B4AF),
-                                    contentColor = Color.Black
+                                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             ) {
                                 Text(text = event.nombre)
