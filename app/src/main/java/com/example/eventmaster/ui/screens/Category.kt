@@ -1,5 +1,5 @@
 package com.example.eventmaster.ui.screens
-
+/*
 import android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,7 +41,7 @@ fun Category(
     id: Int?,
     categoryViewModel: CategoryViewModel,
 ){
-    val category = categoryViewModel.categories.value?.find { it.id == id }
+    val category = categoryViewModel.categoriesList.value?.find { it.id == id }
 
     Column(
         modifier = Modifier
@@ -119,3 +119,4 @@ fun Category(
     }
 }
 
+*/

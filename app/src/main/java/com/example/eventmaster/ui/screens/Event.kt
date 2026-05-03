@@ -1,5 +1,5 @@
 package com.example.eventmaster.ui.screens
-
+/*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,8 +33,9 @@ fun Event(
     categoryId: Int?,
     eventId: Int?
 ){
-    val category = categoryViewModel.categories.value?.find { it.id == categoryId }
-    val event = category?.events?.find { it.id == eventId }
+    val category = categoryViewModel.categoriesList.value?.find { it.id == categoryId }
+
+    // val event = category?.events?.find { it.id == eventId }
 
     if (event != null) {
         Column(
@@ -107,3 +108,4 @@ fun Event(
     }
 
 }
+ */

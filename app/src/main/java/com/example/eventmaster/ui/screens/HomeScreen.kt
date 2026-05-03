@@ -51,7 +51,7 @@ import com.example.eventmaster.viewmodel.CategoryViewModel
 @Composable
 fun HomeScreen(navController: NavController, viewModel: CategoryViewModel){
 
-    val categoryData = viewModel.categories.observeAsState()
+    val categoryData = viewModel.categoriesList.observeAsState()
     val isLoading = viewModel.isLoading.observeAsState()
 
     Column(

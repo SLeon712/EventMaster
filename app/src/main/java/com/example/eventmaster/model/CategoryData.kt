@@ -1,15 +1,20 @@
 package com.example.eventmaster.model
 
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 
+
+@Entity
 data class CategoryData(
-    var id : Int = ++lastId,
+    @PrimaryKey(autoGenerate = true)
+    var id : Int = 0,
     var nombre : String,
     var descripcion : String,
     var iconoId: Int,
-    var events: List<EventData> = emptyList()
-){
-    companion object {
-        private var lastId = 0 // Tracks the last used ID
-    }
+
+) {
+//    @Ignore
+//    var events: List<EventData> = emptyList()
 }
 
