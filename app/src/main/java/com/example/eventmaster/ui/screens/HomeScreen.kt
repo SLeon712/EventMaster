@@ -67,13 +67,12 @@ fun HomeScreen(navController: NavController, viewModel: CategoryViewModel){
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primaryContainer,
         )
-
+        Spacer(modifier = Modifier.height(20.dp))
         Button(
             onClick = { navController.navigate(Routes.CreateCategory)},
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.inversePrimary)
         ){
-            Spacer(modifier = Modifier.height(22.dp))
-            Text(text = "Crear Categoria")
+                Text(text = "Crear Categoria")
         }
         Spacer(modifier = Modifier.height(10.dp))
         if(isLoading.value == true){

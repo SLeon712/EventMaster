@@ -12,3 +12,4 @@ data class CategoryData(
         private var lastId = 0 // Tracks the last used ID
     }
 }
+
