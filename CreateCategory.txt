@@ -1,0 +1,14 @@
+Column(
+        Modifier.fillMaxSize().background(Color(0xFF895120)),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(text = "Nueva Categoria", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        TextField(value = nombre, onValueChange = {nombre = it}, label = {Text(text = "Nombre")})
+        Spacer(modifier = Modifier.height(16.dp))
+
+        TextField(value = descripcion, onValueChange = {descripcion = it}, label = {Text(text = "Descripcion")})
+        Spacer(modifier = Modifier.height(16.dp))
+
