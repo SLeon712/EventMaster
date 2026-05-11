@@ -1,5 +1,5 @@
 package com.example.eventmaster.ui.screens
-/*
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -64,8 +64,8 @@ fun CreateEvent(navController: NavController, categoryViewModel: CategoryViewMod
         Spacer(modifier = Modifier.height(22.dp))
 
         Button(onClick = {
-            val newEvent = EventData(nombre = nombre, descripcion = descripcion, organizador = organizador)
-            // categoryViewModel.addEventToCategory(categoryId, newEvent)
+            val newEvent = EventData(nombre = nombre, descripcion = descripcion, organizador = organizador, categoryId = categoryId)
+            categoryViewModel.addEventToCategory(categoryId, newEvent)
             navController.navigate(Routes.Category + "/${categoryId}")
         }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.inversePrimary))
         {
@@ -75,4 +75,3 @@ fun CreateEvent(navController: NavController, categoryViewModel: CategoryViewMod
     }
 }
 
- */

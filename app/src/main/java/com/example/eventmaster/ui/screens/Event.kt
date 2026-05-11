@@ -1,5 +1,5 @@
 package com.example.eventmaster.ui.screens
-/*
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +14,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -33,7 +34,9 @@ fun Event(
     categoryId: Int?,
     eventId: Int?
 ){
-    val category = categoryViewModel.categoriesList.value?.find { it.id == categoryId }
+    val categoriesWithEvents = categoryViewModel.categoriesWithEvents.observeAsState()
+    val categoryWithEvents = categoriesWithEvents.value?.find { it.categoryData.id == categoryId }
+    val event = categoryWithEvents?.events?.find { it.id == eventId }
 
     // val event = category?.events?.find { it.id == eventId }
 
@@ -108,4 +111,3 @@ fun Event(
     }
 
 }
- */

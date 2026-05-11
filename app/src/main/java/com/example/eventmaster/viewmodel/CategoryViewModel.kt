@@ -8,6 +8,8 @@ import com.example.eventmaster.MainApplication
 import com.example.eventmaster.db.CategoryDao
 import com.example.eventmaster.model.CategoryData
 import com.example.eventmaster.model.CategoryRepository
+import com.example.eventmaster.model.CategoryWithEvents
+import com.example.eventmaster.model.EventData
 //import com.example.eventmaster.model.EventData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,11 +21,17 @@ import kotlinx.coroutines.launch
 * tambien sirve para añadir eventos desde las pantallas a EventData.
 * */
 class CategoryViewModel : ViewModel(){
-    val categoryRepository : CategoryRepository = CategoryRepository()
     val categoryDao = MainApplication.eventMasterDatabase.getCategoryDao()
     val categoriesList : LiveData<List<CategoryData>> = categoryDao.getAllCategories()
+    val categoriesWithEvents: LiveData<List<CategoryWithEvents>> = categoryDao.getCategoriesWithEvents()
+
+    val eventDao = MainApplication.eventMasterDatabase.getEventDao()
+    val eventsList: LiveData<List<EventData>> = eventDao.getAllEvents()
+
     private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading : LiveData<Boolean> = _isLoading
+
+
 
     fun addCategory(nombre: String, descripcion: String, iconoId : Int){
         _isLoading.postValue(true)
@@ -34,15 +42,11 @@ class CategoryViewModel : ViewModel(){
 
 
     }
-//    fun addEventToCategory(categoryId: Int, event: EventData) {
-//        val currentCategories = _categories.value ?: emptyList()
-//        val updatedCategories = currentCategories.map { category ->
-//            if (category.id == categoryId) {
-//                category.copy(events = category.events + event)
-//            } else {
-//                category
-//            }
-//        }
-//        _categories.postValue(updatedCategories)
-//    }
+    fun addEventToCategory(categoryId: Int, event: EventData) {
+        _isLoading.postValue(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            eventDao.addEvents(event.copy(categoryId = categoryId))
+            _isLoading.postValue(false)
+        }
+    }
 }

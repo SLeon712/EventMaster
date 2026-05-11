@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import com.example.eventmaster.model.CategoryData
+import com.example.eventmaster.model.CategoryWithEvents
 import java.util.Locale
 
 @Dao
@@ -15,4 +17,8 @@ interface CategoryDao {
 
     @Insert
     fun addCategories(categoryData: CategoryData)
+
+    @Transaction
+    @Query("SELECT * FROM categorydata")
+    fun getCategoriesWithEvents(): LiveData<List<CategoryWithEvents>>
 }
