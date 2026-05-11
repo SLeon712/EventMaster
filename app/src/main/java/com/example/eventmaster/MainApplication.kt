@@ -16,6 +16,6 @@ class MainApplication : Application() {
             applicationContext,
             EventMasterDatabase::class.java,
             EventMasterDatabase.NAME
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 }

@@ -1,5 +1,5 @@
 package com.example.eventmaster.ui.screens
-/*
+
 import android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +18,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -41,7 +42,11 @@ fun Category(
     id: Int?,
     categoryViewModel: CategoryViewModel,
 ){
-    val category = categoryViewModel.categoriesList.value?.find { it.id == id }
+    val categoriesList = categoryViewModel.categoriesList.observeAsState()
+    val categoriesWithEventsList = categoryViewModel.categoriesWithEvents.observeAsState()
+
+    val category = categoriesList.value?.find { it.id == id }
+    val categoryWithEvents = categoriesWithEventsList.value?.find { it.categoryData.id == id }
 
     Column(
         modifier = Modifier
@@ -94,7 +99,7 @@ fun Category(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier.heightIn(max = 300.dp)
                     ) {
-                        items(category.events) { event ->
+                        items(categoryWithEvents?.events ?: emptyList()) { event ->
 
                             Button(
                                 onClick = {
@@ -119,4 +124,3 @@ fun Category(
     }
 }
 
-*/
