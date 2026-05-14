@@ -1,15 +1,14 @@
 package com.example.eventmaster.model
 
-import java.time.LocalDateTime
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity
 data class EventData(
-    var id : Int = ++lastId,
+    @PrimaryKey(autoGenerate = true)
+    var id : Int = 0,
     var nombre : String,
     var descripcion : String,
     var organizador : String,
-
-    ){
-    companion object {
-        private var lastId = 0 // Tracks the last used ID
-    }
-}
+    var categoryId: Int
+    )

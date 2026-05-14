@@ -18,12 +18,15 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.eventmaster.ui.navigation.Routes
 import com.example.eventmaster.viewmodel.CategoryViewModel
@@ -39,9 +42,13 @@ import com.example.eventmaster.viewmodel.CategoryViewModel
 fun Category(
     navController: NavController,
     id: Int?,
-    categoryViewModel: CategoryViewModel,
+    categoryViewModel: CategoryViewModel = hiltViewModel(),
 ){
-    val category = categoryViewModel.categories.value?.find { it.id == id }
+    val categoriesList = categoryViewModel.categoriesList.collectAsStateWithLifecycle()
+    val categoriesWithEventsList = categoryViewModel.categoriesWithEvents.collectAsStateWithLifecycle()
+
+    val category = categoriesList.value?.find { it.id == id }
+    val categoryWithEvents = categoriesWithEventsList.value?.find { it.categoryData.id == id }
 
     Column(
         modifier = Modifier
@@ -94,7 +101,7 @@ fun Category(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier.heightIn(max = 300.dp)
                     ) {
-                        items(category.events) { event ->
+                        items(categoryWithEvents?.events ?: emptyList()) { event ->
 
                             Button(
                                 onClick = {

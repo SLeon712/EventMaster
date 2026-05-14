@@ -5,38 +5,31 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.eventmaster.R
 import com.example.eventmaster.ui.navigation.Routes
 import com.example.eventmaster.viewmodel.CategoryViewModel
 
@@ -49,10 +42,10 @@ import com.example.eventmaster.viewmodel.CategoryViewModel
 
 
 @Composable
-fun HomeScreen(navController: NavController, viewModel: CategoryViewModel){
+fun HomeScreen(navController: NavController, viewModel: CategoryViewModel = hiltViewModel()){
 
-    val categoryData = viewModel.categories.observeAsState()
-    val isLoading = viewModel.isLoading.observeAsState()
+    val categoryData by viewModel.categoriesList.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.observeAsState(false)
 
     Column(
         Modifier.fillMaxSize().background(MaterialTheme.colorScheme.primary),
@@ -67,23 +60,22 @@ fun HomeScreen(navController: NavController, viewModel: CategoryViewModel){
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primaryContainer,
         )
-
+        Spacer(modifier = Modifier.height(20.dp))
         Button(
             onClick = { navController.navigate(Routes.CreateCategory)},
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.inversePrimary)
         ){
-            Spacer(modifier = Modifier.height(22.dp))
-            Text(text = "Crear Categoria")
+                Text(text = "Crear Categoria")
         }
         Spacer(modifier = Modifier.height(10.dp))
-        if(isLoading.value == true){
+        if(isLoading){
             CircularProgressIndicator(color = MaterialTheme.colorScheme.inversePrimary)
         } else {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
                 content = {
-                    items(categoryData.value ?: emptyList()) { category ->
+                    items(categoryData) { category ->
                         Button(
                             onClick = { navController.navigate(Routes.Category + "/${category.id}") },
                             modifier = Modifier
