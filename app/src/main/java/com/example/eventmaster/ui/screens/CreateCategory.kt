@@ -34,6 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventmaster.R
 import com.example.eventmaster.ui.navigation.Routes
@@ -49,7 +50,7 @@ import com.example.eventmaster.viewmodel.CategoryViewModel
 
 
 @Composable
-fun CreateCategory(navController: NavController,categoryViewModel: CategoryViewModel){
+fun CreateCategory(navController: NavController,categoryViewModel: CategoryViewModel = hiltViewModel()){
 
     var nombre by remember {
         mutableStateOf("")

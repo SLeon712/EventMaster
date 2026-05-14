@@ -24,30 +24,29 @@ import com.example.eventmaster.viewmodel.CategoryViewModel
 @Composable
 fun Navigation(){
     val navController = rememberNavController()
-    val categoryViewModel: CategoryViewModel = viewModel()
 
-    NavHost(navController = navController, startDestination = Routes.HomeScreen, builder = {
+    NavHost(navController = navController, startDestination = Routes.HomeScreen){
         composable(Routes.HomeScreen){
-            HomeScreen(navController,categoryViewModel)
+            HomeScreen(navController)
         }
         composable(Routes.CreateCategory){
-            CreateCategory(navController,categoryViewModel)
+            CreateCategory(navController)
         }
         composable(Routes.Category+"/{categoryId}"){ backStackEntry ->
             val categoryId = backStackEntry.arguments?.getString("categoryId")?.toIntOrNull()
             if (categoryId != null)
-                Category(navController,categoryId,categoryViewModel)
+                Category(navController,categoryId)
         }
         composable(Routes.CreateEvent + "/{categoryId}"){ backStackEntry ->
             val categoryId = backStackEntry.arguments?.getString("categoryId")?.toIntOrNull()
             if (categoryId != null)
-                CreateEvent(navController,categoryViewModel,categoryId)
+                CreateEvent(navController,categoryId)
         }
         composable(Routes.Event + "/{categoryId}" + "/{eventId}"){ backStackEntry ->
             val categoryId = backStackEntry.arguments?.getString("categoryId")?.toIntOrNull()
             val EventId = backStackEntry.arguments?.getString("eventId")?.toIntOrNull()
             if (categoryId != null && EventId != null)
-                Event(categoryViewModel,categoryId,EventId)
+                Event(categoryId,EventId)
         }
-    })
+    }
 }

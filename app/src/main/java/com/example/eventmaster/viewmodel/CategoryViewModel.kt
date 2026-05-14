@@ -10,8 +10,13 @@ import com.example.eventmaster.model.CategoryData
 import com.example.eventmaster.model.CategoryRepository
 import com.example.eventmaster.model.CategoryWithEvents
 import com.example.eventmaster.model.EventData
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 //import com.example.eventmaster.model.EventData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /*
@@ -20,11 +25,24 @@ import kotlinx.coroutines.launch
 * clase viewmodel de categoria como puente para añadir categorias desde las pantallas hacia categoryData,
 * tambien sirve para añadir eventos desde las pantallas a EventData.
 * */
-class CategoryViewModel : ViewModel(){
+@HiltViewModel
+class CategoryViewModel @Inject constructor(
+private val repository: CategoryRepository
+) : ViewModel(){
     val categoryDao = MainApplication.eventMasterDatabase.getCategoryDao()
-    val categoriesList : LiveData<List<CategoryData>> = categoryDao.getAllCategories()
-    val categoriesWithEvents: LiveData<List<CategoryWithEvents>> = categoryDao.getCategoriesWithEvents()
+    val categoriesList: StateFlow<List<CategoryData>> = repository.getAllCategories()
+    .stateIn(
+    scope = viewModelScope,
+    started = SharingStarted.WhileSubscribed(5000),
+    initialValue = emptyList()
+    )
 
+    val categoriesWithEvents: StateFlow<List<CategoryWithEvents>> = repository.getCategoriesWithEvents()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
     val eventDao = MainApplication.eventMasterDatabase.getEventDao()
     val eventsList: LiveData<List<EventData>> = eventDao.getAllEvents()
 
