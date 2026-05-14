@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.eventmaster.model.EventData
 import com.example.eventmaster.ui.navigation.Routes
@@ -34,7 +35,7 @@ import com.example.eventmaster.viewmodel.CategoryViewModel
 
 
 @Composable
-fun CreateEvent(navController: NavController, categoryViewModel: CategoryViewModel, categoryId: Int){
+fun CreateEvent(navController: NavController, categoryId: Int, categoryViewModel: CategoryViewModel = hiltViewModel()){
 
     var nombre by remember {
         mutableStateOf("")

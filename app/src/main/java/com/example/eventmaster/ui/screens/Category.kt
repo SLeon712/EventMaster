@@ -25,6 +25,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.eventmaster.ui.navigation.Routes
 import com.example.eventmaster.viewmodel.CategoryViewModel
@@ -40,10 +42,10 @@ import com.example.eventmaster.viewmodel.CategoryViewModel
 fun Category(
     navController: NavController,
     id: Int?,
-    categoryViewModel: CategoryViewModel,
+    categoryViewModel: CategoryViewModel = hiltViewModel(),
 ){
-    val categoriesList = categoryViewModel.categoriesList.observeAsState()
-    val categoriesWithEventsList = categoryViewModel.categoriesWithEvents.observeAsState()
+    val categoriesList = categoryViewModel.categoriesList.collectAsStateWithLifecycle()
+    val categoriesWithEventsList = categoryViewModel.categoriesWithEvents.collectAsStateWithLifecycle()
 
     val category = categoriesList.value?.find { it.id == id }
     val categoryWithEvents = categoriesWithEventsList.value?.find { it.categoryData.id == id }

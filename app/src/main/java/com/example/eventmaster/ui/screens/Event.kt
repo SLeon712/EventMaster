@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.eventmaster.viewmodel.CategoryViewModel
 
@@ -30,11 +32,11 @@ import com.example.eventmaster.viewmodel.CategoryViewModel
 * */
 @Composable
 fun Event(
-    categoryViewModel: CategoryViewModel,
     categoryId: Int?,
-    eventId: Int?
+    eventId: Int?,
+    categoryViewModel: CategoryViewModel = hiltViewModel()
 ){
-    val categoriesWithEvents = categoryViewModel.categoriesWithEvents.observeAsState()
+    val categoriesWithEvents = categoryViewModel.categoriesWithEvents.collectAsStateWithLifecycle()
     val categoryWithEvents = categoriesWithEvents.value?.find { it.categoryData.id == categoryId }
     val event = categoryWithEvents?.events?.find { it.id == eventId }
 

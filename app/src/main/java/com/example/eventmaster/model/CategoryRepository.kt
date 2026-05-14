@@ -1,10 +1,13 @@
 package com.example.eventmaster.model
 
+import com.example.eventmaster.db.CategoryDao
+import jakarta.inject.Inject
 import kotlinx.coroutines.delay
 
-class CategoryRepository {
-    suspend fun fetchCategoryData(nombre: String, descripcion: String, icono: Int) : CategoryData{
-        delay(2000)
-        return CategoryData(nombre = nombre, descripcion = descripcion, iconoId = icono)
-    }
+class CategoryRepository @Inject constructor(
+private val categoryDao: CategoryDao
+) {
+    fun getAllCategories() = categoryDao.getAllCategories()
+    fun getCategoriesWithEvents() = categoryDao.getCategoriesWithEvents()
+    suspend fun insertCategory(category: CategoryData) = categoryDao.addCategories(category)
 }
