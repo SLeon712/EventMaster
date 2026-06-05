@@ -1,5 +1,6 @@
 package com.example.eventmaster.repository
 
+import com.example.eventmaster.dto.EventRequestDto
 import com.example.eventmaster.model.EventData
 import com.example.eventmaster.remote.ApiService
 import kotlinx.coroutines.flow.Flow
@@ -27,13 +28,13 @@ class EventRepository @Inject constructor(private val apiService: ApiService) {
 
     suspend fun insertEvent(event: EventData) {
         try {
-            val body = mapOf(
-                "nombre"      to event.nombre,
-                "descripcion" to event.descripcion,
-                "organizador" to event.organizador,
-                "category_id" to event.categoryId.toString()
+            val request = EventRequestDto(
+                nombre = event.nombre,
+                descripcion = event.descripcion,
+                organizador = event.organizador,
+                category_id = event.categoryId
             )
-            apiService.createEvent(body)
+            apiService.createEvent(request)
             refreshEvents()
         } catch (e: Exception) {
             e.printStackTrace()

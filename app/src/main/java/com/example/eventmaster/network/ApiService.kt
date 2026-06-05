@@ -3,6 +3,7 @@ package com.example.eventmaster.remote
 import com.example.eventmaster.dto.CategoryDto
 import com.example.eventmaster.dto.CategoryRequestDto
 import com.example.eventmaster.dto.EventDto
+import com.example.eventmaster.dto.EventRequestDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -28,5 +29,5 @@ interface ApiService {
     suspend fun getEvents(): List<EventDto>
 
     @POST("events")
-    suspend fun createEvent(@Body event: Map<String, Any>): EventDto
+    suspend fun createEvent(@Body event: EventRequestDto): EventDto
 }
