@@ -17,6 +17,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -40,8 +41,13 @@ import com.example.eventmaster.viewmodel.CategoryViewModel
 fun Category(
     navController: NavController,
     id: Int?,
-    categoryViewModel: CategoryViewModel = hiltViewModel(),
-){
+    categoryViewModel: CategoryViewModel = hiltViewModel()
+) {
+    // 1. Coloca el LaunchedEffect aquí, al nivel principal de la función
+    // El "Unit" le dice que se ejecute solo una vez cuando el Composable entra en pantalla
+    LaunchedEffect(Unit) {
+        categoryViewModel.refreshEvents()
+    }
     val categoriesList = categoryViewModel.categoriesList.collectAsStateWithLifecycle()
     // Ya no usamos categoriesWithEvents, ahora usaremos solo la lista de eventos
     val eventsList = categoryViewModel.eventsList.collectAsStateWithLifecycle()

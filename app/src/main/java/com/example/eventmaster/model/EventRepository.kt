@@ -27,18 +27,14 @@ class EventRepository @Inject constructor(private val apiService: ApiService) {
     }
 
     suspend fun insertEvent(event: EventData) {
-        try {
-            val request = EventRequestDto(
-                nombre = event.nombre,
-                descripcion = event.descripcion,
-                organizador = event.organizador,
-                category_id = event.categoryId
-            )
-            apiService.createEvent(request)
-            refreshEvents()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        val request = EventRequestDto(
+            nombre = event.nombre,
+            descripcion = event.descripcion,
+            organizador = event.organizador,
+            category_id = event.categoryId
+        )
+        apiService.createEvent(request)
+        refreshEvents()
     }
 }
 

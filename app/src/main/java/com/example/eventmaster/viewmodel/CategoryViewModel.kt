@@ -73,7 +73,8 @@ class CategoryViewModel @Inject constructor(
     fun addEventToCategory(categoryId: Int, event: EventData) {
         viewModelScope.launch(Dispatchers.IO) {
             eventRepository.insertEvent(event)
-            refreshEvents()
+            // Esto obliga a refrescar la lista después de la inserción
+            eventRepository.refreshEvents()
         }
     }
 }
