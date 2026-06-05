@@ -25,6 +25,7 @@ import com.example.eventmaster.viewmodel.CategoryViewModel
 fun Navigation(){
     val navController = rememberNavController()
 
+
     NavHost(navController = navController, startDestination = Routes.HomeScreen){
         composable(Routes.HomeScreen){
             HomeScreen(navController)

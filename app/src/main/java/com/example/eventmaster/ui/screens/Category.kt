@@ -1,6 +1,5 @@
 package com.example.eventmaster.ui.screens
 
-import android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +17,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -45,83 +43,69 @@ fun Category(
     categoryViewModel: CategoryViewModel = hiltViewModel(),
 ){
     val categoriesList = categoryViewModel.categoriesList.collectAsStateWithLifecycle()
-    val categoriesWithEventsList = categoryViewModel.categoriesWithEvents.collectAsStateWithLifecycle()
+    // Ya no usamos categoriesWithEvents, ahora usaremos solo la lista de eventos
+    val eventsList = categoryViewModel.eventsList.collectAsStateWithLifecycle()
 
-    val category = categoriesList.value?.find { it.id == id }
-    val categoryWithEvents = categoriesWithEventsList.value?.find { it.categoryData.id == id }
+    val category = categoriesList.value.find { it.id == id }
+    // Filtramos los eventos manualmente que pertenecen a esta categoría
+    val filteredEvents = eventsList.value.filter { it.categoryId == id }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(R.color.background_light))
-            .background(MaterialTheme.colorScheme.primary),
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
 
         if (category != null) {
-                Column(
-                    modifier = Modifier.padding(12.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+            Column(
+                modifier = Modifier.padding(12.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = category.nombre,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    text = category.descripcion,
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = { navController.navigate(Routes.CreateEvent + "/${category.id}") },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
+                    Text(text = "Crear Evento", color = MaterialTheme.colorScheme.onPrimary)
+                }
 
-                    Text(
-                        text = category.nombre,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.primaryContainer
-                    )
-                    Text(
-                        text = category.descripcion,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = MaterialTheme.colorScheme.primaryContainer
-                    )
+                Spacer(modifier = Modifier.height(10.dp))
 
-                    Spacer(modifier = Modifier.height(10.dp))
-
-
-                    Button(
-                        onClick = {
-                            navController.navigate(Routes.CreateEvent + "/${category.id}")
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.inversePrimary
-                        )
-                    ) {
-                        Text(text = "Crear Evento")
-                    }
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-
-                    LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.heightIn(max = 300.dp)
-                    ) {
-                        items(categoryWithEvents?.events ?: emptyList()) { event ->
-
-                            Button(
-                                onClick = {
-                                    navController.navigate(Routes.Event + "/${category.id}" + "/${event.id}")
-                                },
-                                modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(8.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            ) {
-                                Text(text = event.nombre)
-                            }
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.heightIn(max = 300.dp)
+                ) {
+                    // Ahora recorremos los eventos filtrados
+                    items(filteredEvents) { event ->
+                        Button(
+                            onClick = { navController.navigate(Routes.Event + "/${category.id}" + "/${event.id}") },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                        ) {
+                            Text(text = event.nombre, color = MaterialTheme.colorScheme.onSecondary)
                         }
                     }
                 }
-
+            }
         } else {
-            Text(text = "Categoria no encontrada")
+            Text(text = "Categoría no encontrada", color = MaterialTheme.colorScheme.error)
         }
     }
 }

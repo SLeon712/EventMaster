@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -48,7 +49,7 @@ fun HomeScreen(navController: NavController, viewModel: CategoryViewModel = hilt
     val isLoading by viewModel.isLoading.observeAsState(false)
 
     Column(
-        Modifier.fillMaxSize().background(MaterialTheme.colorScheme.primary),
+        Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -58,7 +59,7 @@ fun HomeScreen(navController: NavController, viewModel: CategoryViewModel = hilt
             text = "Event Master",
             fontSize = 36.sp,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primaryContainer,
+            color = MaterialTheme.colorScheme.onBackground,
         )
         Spacer(modifier = Modifier.height(20.dp))
         Button(
@@ -79,7 +80,7 @@ fun HomeScreen(navController: NavController, viewModel: CategoryViewModel = hilt
                         Button(
                             onClick = { navController.navigate(Routes.Category + "/${category.id}") },
                             modifier = Modifier
-                                .fillMaxSize()
+                                .fillMaxWidth()
                                 .padding(8.dp)
                                 .height(110.dp),
                             shape = RoundedCornerShape(16.dp),
@@ -90,7 +91,7 @@ fun HomeScreen(navController: NavController, viewModel: CategoryViewModel = hilt
                                 verticalArrangement = Arrangement.Center
                             ) {
                                 Icon(
-                                    painter = painterResource(id = category.iconoId),
+                                    painter = painterResource(id = if (category.iconoId != 0) category.iconoId else com.example.eventmaster.R.drawable.image),
                                     modifier = Modifier.size(36.dp),
                                     contentDescription = "Icono",
                                 )

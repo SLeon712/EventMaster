@@ -109,7 +109,7 @@ fun CreateCategory(navController: NavController,categoryViewModel: CategoryViewM
                 categoryViewModel.addCategory(nombre, descripcion, selectIcon)
                 navController.navigate(Routes.HomeScreen)
                 },
-                enabled = selectedIcon != null,
+                enabled = selectIcon != 0,
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.inversePrimary)
             )
             {

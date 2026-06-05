@@ -11,4 +11,6 @@ object Routes {
     var Category = "Category"
     var CreateEvent = "Create_Event"
     var Event = "Event"
+
+    const val LoginScreen = "login_screen"
 }

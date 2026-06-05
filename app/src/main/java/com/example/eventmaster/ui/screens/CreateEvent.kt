@@ -5,10 +5,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -35,44 +39,82 @@ import com.example.eventmaster.viewmodel.CategoryViewModel
 
 
 @Composable
-fun CreateEvent(navController: NavController, categoryId: Int, categoryViewModel: CategoryViewModel = hiltViewModel()){
-
-    var nombre by remember {
-        mutableStateOf("")
-    }
-    var descripcion by remember {
-        mutableStateOf("")
-    }
-    var organizador by remember {
-        mutableStateOf("")
-    }
+fun CreateEvent(
+    navController: NavController,
+    categoryId: Int,
+    categoryViewModel: CategoryViewModel = hiltViewModel()
+) {
+    // Variables de estado para los campos
+    var nombre by remember { mutableStateOf("") }
+    var descripcion by remember { mutableStateOf("") }
+    var organizador by remember { mutableStateOf("") } // <-- Nuevo estado
 
     Column(
-        Modifier.fillMaxSize().background(MaterialTheme.colorScheme.primary),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Nuevo Evento", fontSize = 28.sp, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(22.dp))
+        Text(
+            text = "Crear Nuevo Evento",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
 
-        TextField(value = nombre, onValueChange = {nombre = it}, label = {Text(text = "Nombre")})
-        Spacer(modifier = Modifier.height(22.dp))
+        OutlinedTextField(
+            value = nombre,
+            onValueChange = { nombre = it },
+            label = { Text("Nombre del Evento") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
 
-        TextField(value = descripcion, onValueChange = {descripcion = it}, label = {Text(text = "descripcion")})
-        Spacer(modifier = Modifier.height(22.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-        TextField(value = organizador, onValueChange = {organizador = it}, label = {Text(text = "organizador")})
-        Spacer(modifier = Modifier.height(22.dp))
+        OutlinedTextField(
+            value = descripcion,
+            onValueChange = { descripcion = it },
+            label = { Text("Descripción") },
+            modifier = Modifier.fillMaxWidth()
+        )
 
-        Button(onClick = {
-            val newEvent = EventData(nombre = nombre, descripcion = descripcion, organizador = organizador, categoryId = categoryId)
-            categoryViewModel.addEventToCategory(categoryId, newEvent)
-            navController.navigate(Routes.Category + "/${categoryId}")
-        }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.inversePrimary))
-        {
-            Text(text = "Crear Evento")
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Campo para el Organizador
+        OutlinedTextField(
+            value = organizador,
+            onValueChange = { organizador = it },
+            label = { Text("Organizador") }, // <-- Etiqueta visible
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = {
+                if (nombre.isNotBlank() && descripcion.isNotBlank()) {
+                    // Llamamos a la función pasando el nuevo dato
+                    val nuevoEvento = EventData(
+                        id = 0,
+                        nombre = nombre,
+                        descripcion = descripcion,
+                        categoryId = categoryId,
+                        organizador = organizador // Enviamos el dato al modelo
+                    )
+                    categoryViewModel.addEventToCategory(categoryId, nuevoEvento)
+                    navController.popBackStack()
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+        ) {
+            Text("Guardar Evento", color = MaterialTheme.colorScheme.onPrimary)
         }
-
     }
 }
 

@@ -14,7 +14,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -36,9 +36,9 @@ fun Event(
     eventId: Int?,
     categoryViewModel: CategoryViewModel = hiltViewModel()
 ){
-    val categoriesWithEvents = categoryViewModel.categoriesWithEvents.collectAsStateWithLifecycle()
-    val categoryWithEvents = categoriesWithEvents.value?.find { it.categoryData.id == categoryId }
-    val event = categoryWithEvents?.events?.find { it.id == eventId }
+    // Obtenemos los eventos directamente de la lista filtrada del ViewModel
+    val eventsList by categoryViewModel.eventsList.collectAsStateWithLifecycle()
+    val event = eventsList.find { it.id == eventId }
 
     // val event = category?.events?.find { it.id == eventId }
 

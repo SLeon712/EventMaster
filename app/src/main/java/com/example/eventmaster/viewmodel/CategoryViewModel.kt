@@ -1,70 +1,79 @@
 package com.example.eventmaster.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.eventmaster.MainApplication
-import com.example.eventmaster.db.CategoryDao
 import com.example.eventmaster.model.CategoryData
-import com.example.eventmaster.model.CategoryRepository
 import com.example.eventmaster.model.CategoryWithEvents
 import com.example.eventmaster.model.EventData
+import com.example.eventmaster.repository.CategoryRepository
+import com.example.eventmaster.repository.EventRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
-//import com.example.eventmaster.model.EventData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-/*
-* Category ViewModel
-*
-* clase viewmodel de categoria como puente para añadir categorias desde las pantallas hacia categoryData,
-* tambien sirve para añadir eventos desde las pantallas a EventData.
-* */
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
-private val repository: CategoryRepository
-) : ViewModel(){
-    val categoryDao = MainApplication.eventMasterDatabase.getCategoryDao()
-    val categoriesList: StateFlow<List<CategoryData>> = repository.getAllCategories()
-    .stateIn(
-    scope = viewModelScope,
-    started = SharingStarted.WhileSubscribed(5000),
-    initialValue = emptyList()
-    )
+    private val categoryRepository: CategoryRepository,
+    private val eventRepository: EventRepository
+) : ViewModel() {
 
-    val categoriesWithEvents: StateFlow<List<CategoryWithEvents>> = repository.getCategoriesWithEvents()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-    val eventDao = MainApplication.eventMasterDatabase.getEventDao()
-    val eventsList: LiveData<List<EventData>> = eventDao.getAllEvents()
+    val categoriesList: StateFlow<List<CategoryData>> = categoryRepository.categories
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    private val _isLoading = MutableLiveData<Boolean>(false)
-    val isLoading : LiveData<Boolean> = _isLoading
+    val eventsList: StateFlow<List<EventData>> = eventRepository.events
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
+    val isLoading = MutableLiveData(false)
 
+    val categoriesWithEvents: StateFlow<List<CategoryWithEvents>> =
+        combine(categoriesList, eventsList) { cats, evts ->
+            cats.map { cat ->
+                CategoryWithEvents(
+                    categoryData = cat,
+                    events = evts.filter { it.categoryId == cat.id }
+                )
+            }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    fun addCategory(nombre: String, descripcion: String, iconoId : Int){
-        _isLoading.postValue(true)
-        viewModelScope.launch(Dispatchers.IO) {
-            categoryDao.addCategories(CategoryData(nombre = nombre, descripcion = descripcion, iconoId = iconoId))
-            _isLoading.postValue(false)
+    init {
+        viewModelScope.launch {
+            refreshCategories()
+            refreshEvents()
         }
-
-
     }
-    fun addEventToCategory(categoryId: Int, event: EventData) {
-        _isLoading.postValue(true)
+
+    fun refreshCategories() {
+        viewModelScope.launch {
+            isLoading.value = true
+            categoryRepository.refreshCategories()
+            isLoading.value = false
+        }
+    }
+
+    fun refreshEvents() {
+        viewModelScope.launch {
+            eventRepository.refreshEvents()
+        }
+    }
+
+    fun addCategory(nombre: String, descripcion: String, iconoId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            eventDao.addEvents(event.copy(categoryId = categoryId))
-            _isLoading.postValue(false)
+            val category = CategoryData(nombre = nombre, descripcion = descripcion, iconoId = iconoId)
+            categoryRepository.insertCategory(category)
+            refreshCategories()
+        }
+    }
+
+    fun addEventToCategory(categoryId: Int, event: EventData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            eventRepository.insertEvent(event)
+            refreshEvents()
         }
     }
 }
